@@ -24,16 +24,20 @@ import python from "react-syntax-highlighter/dist/esm/languages/prism/python";
 import { oneLight, oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 import { useDagServiceGetDagDetails, useDagSourceServiceGetDagSource } from "openapi/queries";
+import DagVersionSelect from "src/components/DagVersionSelect";
 import { ErrorAlert } from "src/components/ErrorAlert";
 import Time from "src/components/Time";
 import { ProgressBar } from "src/components/ui";
 import { useColorMode } from "src/context/colorMode";
+import useSelectedVersion from "src/hooks/useSelectedVersion";
 import { useConfig } from "src/queries/useConfig";
 
 SyntaxHighlighter.registerLanguage("python", python);
 
 export const Code = () => {
   const { dagId } = useParams();
+
+  const selectedVersion = useSelectedVersion();
 
   const {
     data: dag,
@@ -49,6 +53,7 @@ export const Code = () => {
     isLoading: isCodeLoading,
   } = useDagSourceServiceGetDagSource({
     dagId: dagId ?? "",
+    versionNumber: selectedVersion === undefined ? undefined : parseInt(selectedVersion, 10),
   });
 
   const defaultWrap = Boolean(useConfig("default_wrap"));
@@ -73,9 +78,12 @@ export const Code = () => {
             Parsed at: <Time datetime={dag.last_parsed_time} />
           </Heading>
         )}
-        <Button aria-label={wrap ? "Unwrap" : "Wrap"} bg="bg.panel" onClick={toggleWrap} variant="outline">
-          {wrap ? "Unwrap" : "Wrap"}
-        </Button>
+        <HStack>
+          <DagVersionSelect />
+          <Button aria-label={wrap ? "Unwrap" : "Wrap"} bg="bg.panel" onClick={toggleWrap} variant="outline">
+            {wrap ? "Unwrap" : "Wrap"}
+          </Button>
+        </HStack>
       </HStack>
       <ErrorAlert error={error ?? codeError} />
       <ProgressBar size="xs" visibility={isLoading || isCodeLoading ? "visible" : "hidden"} />

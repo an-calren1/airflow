@@ -19,20 +19,19 @@ from __future__ import annotations
 import base64
 import os
 import pickle
-import uuid
 from collections.abc import Sequence
 from shlex import quote
 from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING, Callable
 
 import dill
+from kubernetes.client import models as k8s
 
 from airflow.decorators.base import DecoratedOperator, TaskDecorator, task_decorator_factory
 from airflow.providers.cncf.kubernetes.operators.pod import KubernetesPodOperator
 from airflow.providers.cncf.kubernetes.python_kubernetes_script import (
     write_python_script,
 )
-from kubernetes.client import models as k8s
 
 if TYPE_CHECKING:
     from airflow.utils.context import Context
@@ -68,9 +67,15 @@ class _KubernetesDecoratedOperator(DecoratedOperator, KubernetesPodOperator):
 
     def __init__(self, namespace: str | None = None, use_dill: bool = False, **kwargs) -> None:
         self.use_dill = use_dill
+
+        # If the name was not provided, we generate operator name from the python_callable
+        # we also instruct operator to add a random suffix to avoid collisions by default
+        op_name = kwargs.pop("name", f"k8s-airflow-pod-{kwargs['python_callable'].__name__}")
+        random_name_suffix = kwargs.pop("random_name_suffix", True)
         super().__init__(
             namespace=namespace,
-            name=kwargs.pop("name", f"k8s_airflow_pod_{uuid.uuid4().hex}"),
+            name=op_name,
+            random_name_suffix=random_name_suffix,
             cmds=["placeholder-command"],
             **kwargs,
         )
@@ -138,7 +143,7 @@ def kubernetes_task(
     Kubernetes operator decorator.
 
     This wraps a function to be executed in K8s using KubernetesPodOperator.
-    Also accepts any argument that DockerOperator will via ``kwargs``. Can be
+    Also accepts any argument that KubernetesPodOperator will via ``kwargs``. Can be
     reused in a single DAG.
 
     :param python_callable: Function to decorate

@@ -25,10 +25,7 @@ labelPRBasedOnFilePath:
     - providers/alibaba/**
 
   provider:amazon:
-    - providers/src/airflow/providers/amazon/**/*
-    - providers/tests/amazon/aws/**/*
-    - docs/apache-airflow-providers-amazon/**/*
-    - providers/tests/system/amazon/aws/**/*
+    - providers/amazon/**
 
   provider:apache-beam:
     - providers/apache/beam/**
@@ -175,10 +172,7 @@ labelPRBasedOnFilePath:
     - providers/jenkins/**
 
   provider:microsoft-azure:
-    - providers/src/airflow/providers/microsoft/azure/**/*
-    - providers/tests/microsoft/azure/**/*
-    - docs/apache-airflow-providers-microsoft-azure/**/*
-    - providers/tests/system/microsoft/azure/**/*
+    - providers/microsoft/azure/**
 
   provider:microsoft-mssql:
     - providers/microsoft/mssql/**
@@ -303,18 +297,12 @@ labelPRBasedOnFilePath:
   provider:zendesk:
     - providers/zendesk/**
 
-  area:providers:
-    - providers/src/airflow/providers/**/*
-    - docs/apache-airflow-providers-*/**/*
-    - providers/tests/**/*
-    - providers/tests/system/**/*
-
   area:API:
     - airflow/api/**/*
-    - airflow/api_connexion/**/*
+    - airflow/api_fastapi/**/*
     - clients/**/*
     - docs/apache-airflow/stable-rest-api-ref.rst
-    - tests/api_connexion/**/*
+    - tests/api_fastapi/**/*
 
   area:dev-tools:
     - scripts/**/*
@@ -331,10 +319,6 @@ labelPRBasedOnFilePath:
     - .pre-commit-config.yaml
     - .rat-excludes
     - .readthedocs.yml
-    - airflow/www/.eslintignore
-    - airflow/www/.eslintrc
-    - airflow/www/.stylelintignore
-    - airflow/www/.stylelintrc
 
   kind:documentation:
     - docs/**/*
@@ -343,22 +327,7 @@ labelPRBasedOnFilePath:
     - chart/**/*
     - docs/helm-chart/**
 
-  area:Webserver:
-    - airflow/cli/commands/local_commands/webserver_command.py
-    - airflow/www/**/*
-    - tests/cli/commands/local_commands/test_webserver_command.py
-    - tests/www/**/*
-
   area:UI:
-    - airflow/www/static/**/*
-    - airflow/www/templates/**/*
-    - airflow/www/.eslintignore
-    - airflow/www/.eslintrc
-    - airflow/www/.stylelintignore
-    - airflow/www/.stylelintrc
-    - airflow/www/package.json
-    - airflow/www/webpack.config.js
-    - airflow/www/yarn.lock
     - docs/apache-airflow/ui.rst
     - airflow/ui/**/*
 
@@ -374,18 +343,17 @@ labelPRBasedOnFilePath:
     - docs/apache-airflow/administration-and-deployment/lineage.rst
 
   area:Logging:
-    - providers/src/airflow/providers/**/log/*
     - airflow/utils/log/**/*
     - docs/apache-airflow/administration-and-deployment/logging-monitoring/logging-*.rst
-    - providers/tests/**/log/*
     - tests/utils/log/**/*
+    - providers/**/log/*
 
   area:Plugins:
     - airflow/cli/commands/local_commands/plugins_command.py
     - airflow/plugins_manager.py
     - tests/cli/commands/local_commands/test_plugins_command.py
     - tests/plugins/**/*
-    - docs/apache-airflow/authoring-and-scheduling/plugins.rst
+    - docs/apache-airflow/administration-and-deployment/plugins.rst
 
   area:Scheduler:
     - airflow/jobs/scheduler_job_runner.py
@@ -406,9 +374,8 @@ labelPRBasedOnFilePath:
 
   area:Secrets:
     - airflow/secrets/**/*
-    - providers/src/airflow/providers/**/secrets/*
     - tests/secrets/**/*
-    - providers/tests/**/secrets/*
+    - providers/**/secrets/*
     - docs/apache-airflow/security/secrets/**/*
 
   area:Triggerer:
@@ -419,8 +386,7 @@ labelPRBasedOnFilePath:
     - tests/cli/commands/local_commands/test_triggerer_command.py
     - tests/jobs/test_triggerer_job.py
     - tests/models/test_trigger.py
-    - tests/jobs/test_triggerer_job_logging.py
-    - providers/standard/tests/provider_tests/standard/triggers/**/*
+    - providers/standard/tests/unit/standard/triggers/**/*
 
   area:Serialization:
     - airflow/serialization/**/*
@@ -452,6 +418,9 @@ labelPRBasedOnFilePath:
 
   area:db-migrations:
     - airflow/migrations/versions/*
+
+  area:providers:
+    - providers/**/*
 
 # Various Flags to control behaviour of the "Labeler"
 labelerFlags:

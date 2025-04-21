@@ -124,8 +124,6 @@ require Breeze Docker image to be built locally.
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | check-airflow-k8s-not-used                                | Check airflow.kubernetes imports are not used          |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
-| check-airflow-provider-compatibility                      | Check compatibility of Providers with Airflow          |         |
-+-----------------------------------------------------------+--------------------------------------------------------+---------+
 | check-airflow-providers-bug-report-template               | Sort airflow-bug-report provider list                  |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | check-apache-license-rat                                  | Check if licenses are OK for Apache                    |         |
@@ -157,6 +155,8 @@ require Breeze Docker image to be built locally.
 | check-daysago-import-from-utils                           | days_ago imported from airflow.utils.dates             |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | check-decorated-operator-implements-custom-name           | Check @task decorator implements custom_operator_name  |         |
++-----------------------------------------------------------+--------------------------------------------------------+---------+
+| check-default-configuration                               | Check the default configuration                        | *       |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | check-deferrable-default                                  | Check and fix default value of default_deferrable      |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
@@ -252,15 +252,15 @@ require Breeze Docker image to be built locally.
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | check-xml                                                 | Check XML files with xmllint                           |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
+| check-zip-file-is-not-committed                           | Check no zip files are committed                       |         |
++-----------------------------------------------------------+--------------------------------------------------------+---------+
 | codespell                                                 | Run codespell                                          |         |
++-----------------------------------------------------------+--------------------------------------------------------+---------+
+| compile-fab-assets                                        | Compile FAB provider assets                            |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | compile-ui-assets                                         | Compile ui assets (manual)                             |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | compile-ui-assets-dev                                     | Compile ui assets in dev mode (manual)                 |         |
-+-----------------------------------------------------------+--------------------------------------------------------+---------+
-| compile-www-assets                                        | Compile www assets (manual)                            |         |
-+-----------------------------------------------------------+--------------------------------------------------------+---------+
-| compile-www-assets-dev                                    | Compile www assets in dev mode (manual)                |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | create-missing-init-py-files-tests                        | Create missing init.py files in tests                  |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
@@ -282,6 +282,8 @@ require Breeze Docker image to be built locally.
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | generate-pypi-readme                                      | Generate PyPI README                                   |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
+| generate-tasksdk-datamodels                               | Generate Datamodels for TaskSDK client                 | *       |
++-----------------------------------------------------------+--------------------------------------------------------+---------+
 | generate-volumes-for-sources                              | Generate volumes for docker compose                    |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | identity                                                  | Print checked files                                    |         |
@@ -289,7 +291,6 @@ require Breeze Docker image to be built locally.
 | insert-license                                            | * Add license for all SQL files                        |         |
 |                                                           | * Add license for all RST files                        |         |
 |                                                           | * Add license for CSS/JS/JSX/PUML/TS/TSX               |         |
-|                                                           | * Add license for all JINJA template files             |         |
 |                                                           | * Add license for all Shell files                      |         |
 |                                                           | * Add license for all toml files                       |         |
 |                                                           | * Add license for all Python files                     |         |
@@ -303,8 +304,6 @@ require Breeze Docker image to be built locally.
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | lint-chart-schema                                         | Lint chart/values.schema.json file                     |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
-| lint-css                                                  | stylelint                                              |         |
-+-----------------------------------------------------------+--------------------------------------------------------+---------+
 | lint-dockerfile                                           | Lint Dockerfile                                        |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | lint-helm-chart                                           | Lint Helm Chart                                        |         |
@@ -317,9 +316,6 @@ require Breeze Docker image to be built locally.
 |                                                           | * Lint config_templates/config.yml                     |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | lint-markdown                                             | Run markdownlint                                       |         |
-+-----------------------------------------------------------+--------------------------------------------------------+---------+
-| lint-openapi                                              | * Lint OpenAPI using spectral                          |         |
-|                                                           | * Lint OpenAPI using openapi-spec-validator            |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | mixed-line-ending                                         | Detect if mixed line ending is used (\r vs. \r\n)      |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
@@ -358,8 +354,6 @@ require Breeze Docker image to be built locally.
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | ts-compile-format-lint-ui                                 | Compile / format / lint UI                             |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
-| ts-compile-format-lint-www                                | Compile / format / lint WWW                            |         |
-+-----------------------------------------------------------+--------------------------------------------------------+---------+
 | update-black-version                                      | Update black versions everywhere (manual)              |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | update-breeze-cmd-output                                  | Update breeze docs                                     |         |
@@ -383,8 +377,6 @@ require Breeze Docker image to be built locally.
 | update-local-yml-file                                     | Update mounts in the local yml file                    |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | update-migration-references                               | Update migration ref doc                               | *       |
-+-----------------------------------------------------------+--------------------------------------------------------+---------+
-| update-openapi-spec-tags-to-be-sorted                     | Sort alphabetically openapi spec tags                  |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+
 | update-providers-build-files                              | Update providers build files                           |         |
 +-----------------------------------------------------------+--------------------------------------------------------+---------+

@@ -20,13 +20,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from jinja2 import TemplateAssertionError, UndefinedError
+from kubernetes.client.api_client import ApiClient
 
 from airflow.exceptions import AirflowException
 from airflow.providers.cncf.kubernetes.kube_config import KubeConfig
 from airflow.providers.cncf.kubernetes.kubernetes_helper_functions import create_unique_id
 from airflow.providers.cncf.kubernetes.pod_generator import PodGenerator
 from airflow.utils.session import NEW_SESSION, provide_session
-from kubernetes.client.api_client import ApiClient
 
 if TYPE_CHECKING:
     from airflow.models.taskinstance import TaskInstance
@@ -35,6 +35,14 @@ if TYPE_CHECKING:
 def render_k8s_pod_yaml(task_instance: TaskInstance) -> dict | None:
     """Render k8s pod yaml."""
     kube_config = KubeConfig()
+    if task_instance.executor_config and task_instance.executor_config.get("pod_template_file"):
+        # If a specific pod_template_file was passed to the executor, we make
+        # sure to render the k8s pod spec using this one, and not the default one.
+        pod_template_file = task_instance.executor_config["pod_template_file"]
+    else:
+        # If no such pod_template_file override was passed, we can simply render
+        # The pod spec using the default template.
+        pod_template_file = kube_config.pod_template_file
     pod = PodGenerator.construct_pod(
         dag_id=task_instance.dag_id,
         run_id=task_instance.run_id,
@@ -48,7 +56,7 @@ def render_k8s_pod_yaml(task_instance: TaskInstance) -> dict | None:
         pod_override_object=PodGenerator.from_obj(task_instance.executor_config),
         scheduler_job_id="0",
         namespace=kube_config.executor_namespace,
-        base_worker_pod=PodGenerator.deserialize_model_file(kube_config.pod_template_file),
+        base_worker_pod=PodGenerator.deserialize_model_file(pod_template_file),
         with_mutation_hook=True,
     )
     sanitized_pod = ApiClient().sanitize_for_serialization(pod)

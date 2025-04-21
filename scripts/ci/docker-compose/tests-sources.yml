@@ -41,6 +41,7 @@ services:
       # START automatically generated volumes by generate-volumes-for-sources pre-commit
       - ../../../providers/airbyte/tests:/opt/airflow/providers/airbyte/tests
       - ../../../providers/alibaba/tests:/opt/airflow/providers/alibaba/tests
+      - ../../../providers/amazon/tests:/opt/airflow/providers/amazon/tests
       - ../../../providers/apache/beam/tests:/opt/airflow/providers/apache/beam/tests
       - ../../../providers/apache/cassandra/tests:/opt/airflow/providers/apache/cassandra/tests
       - ../../../providers/apache/drill/tests:/opt/airflow/providers/apache/drill/tests
@@ -66,6 +67,7 @@ services:
       - ../../../providers/cohere/tests:/opt/airflow/providers/cohere/tests
       - ../../../providers/common/compat/tests:/opt/airflow/providers/common/compat/tests
       - ../../../providers/common/io/tests:/opt/airflow/providers/common/io/tests
+      - ../../../providers/common/messaging/tests:/opt/airflow/providers/common/messaging/tests
       - ../../../providers/common/sql/tests:/opt/airflow/providers/common/sql/tests
       - ../../../providers/databricks/tests:/opt/airflow/providers/databricks/tests
       - ../../../providers/datadog/tests:/opt/airflow/providers/datadog/tests
@@ -88,6 +90,7 @@ services:
       - ../../../providers/influxdb/tests:/opt/airflow/providers/influxdb/tests
       - ../../../providers/jdbc/tests:/opt/airflow/providers/jdbc/tests
       - ../../../providers/jenkins/tests:/opt/airflow/providers/jenkins/tests
+      - ../../../providers/microsoft/azure/tests:/opt/airflow/providers/microsoft/azure/tests
       - ../../../providers/microsoft/mssql/tests:/opt/airflow/providers/microsoft/mssql/tests
       - ../../../providers/microsoft/psrp/tests:/opt/airflow/providers/microsoft/psrp/tests
       - ../../../providers/microsoft/winrm/tests:/opt/airflow/providers/microsoft/winrm/tests

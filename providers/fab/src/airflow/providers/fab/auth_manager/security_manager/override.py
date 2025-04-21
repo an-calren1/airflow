@@ -110,9 +110,10 @@ from airflow.providers.fab.auth_manager.views.user_stats import CustomUserStatsC
 from airflow.providers.fab.www.security import permissions
 from airflow.providers.fab.www.security_manager import AirflowSecurityManagerV2
 from airflow.providers.fab.www.session import (
+    AirflowDatabaseSessionInterface,
     AirflowDatabaseSessionInterface as FabAirflowDatabaseSessionInterface,
 )
-from airflow.www.session import AirflowDatabaseSessionInterface
+from airflow.providers.fab.www.utils import get_fab_auth_manager
 
 if TYPE_CHECKING:
     from airflow.providers.fab.www.security.permissions import RESOURCE_ASSET
@@ -2104,6 +2105,20 @@ class FabAirflowSecurityManagerOverride(AirflowSecurityManagerV2):
                 log.error(e)
                 return None
 
+    def check_password(self, username, password) -> bool:
+        """
+        Check if the password is correct for the username.
+
+        :param username: the username
+        :param password: the password
+        """
+        user = self.find_user(username=username)
+        if user is None:
+            user = self.find_user(email=username)
+        if user is None:
+            return False
+        return check_password_hash(user.password, password)
+
     def auth_user_db(self, username, password):
         """
         Authenticate user, auth db style.
@@ -2447,7 +2462,7 @@ class FabAirflowSecurityManagerOverride(AirflowSecurityManagerV2):
         return user
 
     def get_user_menu_access(self, menu_names: list[str] | None = None) -> set[str]:
-        if get_auth_manager().is_logged_in():
+        if get_fab_auth_manager().is_logged_in():
             return self._get_user_permission_resources(g.user, "menu_access", resource_names=menu_names)
         elif current_user_jwt:
             return self._get_user_permission_resources(

@@ -16,21 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { Flex, useToken } from "@chakra-ui/react";
+import { useToken } from "@chakra-ui/react";
 import { ReactFlow, Controls, Background, MiniMap, type Node as ReactFlowNode } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useParams } from "react-router-dom";
 
 import { useGridServiceGridData, useStructureServiceStructureData } from "openapi/queries";
+import Edge from "src/components/Graph/Edge";
+import { JoinNode } from "src/components/Graph/JoinNode";
+import { TaskNode } from "src/components/Graph/TaskNode";
+import type { CustomNodeProps } from "src/components/Graph/reactflowUtils";
+import { useGraphLayout } from "src/components/Graph/useGraphLayout";
 import { useColorMode } from "src/context/colorMode";
 import { useOpenGroups } from "src/context/openGroups";
+import useSelectedVersion from "src/hooks/useSelectedVersion";
 import { isStatePending, useAutoRefresh } from "src/utils";
-
-import Edge from "./Edge";
-import { JoinNode } from "./JoinNode";
-import { TaskNode } from "./TaskNode";
-import type { CustomNodeProps } from "./reactflowUtils";
-import { useGraphLayout } from "./useGraphLayout";
 
 const nodeColor = (
   { data: { depth, height, isOpen, taskInstance, width }, type }: ReactFlowNode<CustomNodeProps>,
@@ -64,6 +64,8 @@ export const Graph = () => {
   const { colorMode = "light" } = useColorMode();
   const { dagId = "", runId, taskId } = useParams();
 
+  const selectedVersion = useSelectedVersion();
+
   // corresponds to the "bg", "bg.emphasized", "border.inverted" semantic tokens
   const [oddLight, oddDark, evenLight, evenDark, selectedDarkColor, selectedLightColor] = useToken("colors", [
     "white",
@@ -77,15 +79,18 @@ export const Graph = () => {
   const { openGroupIds } = useOpenGroups();
 
   const selectedColor = colorMode === "dark" ? selectedDarkColor : selectedLightColor;
+  const versionNumber = selectedVersion === undefined ? undefined : parseInt(selectedVersion, 10);
 
   const { data: graphData = { arrange: "LR", edges: [], nodes: [] } } = useStructureServiceStructureData({
     dagId,
+    versionNumber,
   });
 
   const { data } = useGraphLayout({
     ...graphData,
     dagId,
     openGroupIds,
+    versionNumber,
   });
 
   const refetchInterval = useAutoRefresh({ dagId });
@@ -95,7 +100,7 @@ export const Graph = () => {
       dagId,
       limit: 25,
       offset: 0,
-      orderBy: "-start_date",
+      orderBy: "-run_after",
     },
     undefined,
     {
@@ -125,39 +130,37 @@ export const Graph = () => {
         });
 
   return (
-    <Flex flex={1}>
-      <ReactFlow
-        colorMode={colorMode}
-        defaultEdgeOptions={{ zIndex: 1 }}
-        edges={data?.edges ?? []}
-        edgeTypes={edgeTypes}
-        // Fit view to selected task or the whole graph on render
-        fitView
-        maxZoom={1}
-        minZoom={0.25}
-        nodes={nodes}
-        nodesDraggable={false}
-        nodeTypes={nodeTypes}
-        onlyRenderVisibleElements
-      >
-        <Background />
-        <Controls showInteractive={false} />
-        <MiniMap
-          nodeColor={(node: ReactFlowNode<CustomNodeProps>) =>
-            nodeColor(
-              node,
-              colorMode === "dark" ? evenDark : evenLight,
-              colorMode === "dark" ? oddDark : oddLight,
-            )
-          }
-          nodeStrokeColor={(node: ReactFlowNode<CustomNodeProps>) =>
-            node.data.isSelected && selectedColor !== undefined ? selectedColor : ""
-          }
-          nodeStrokeWidth={15}
-          pannable
-          zoomable
-        />
-      </ReactFlow>
-    </Flex>
+    <ReactFlow
+      colorMode={colorMode}
+      defaultEdgeOptions={{ zIndex: 1 }}
+      edges={data?.edges ?? []}
+      edgeTypes={edgeTypes}
+      // Fit view to selected task or the whole graph on render
+      fitView
+      maxZoom={1}
+      minZoom={0.25}
+      nodes={nodes}
+      nodesDraggable={false}
+      nodeTypes={nodeTypes}
+      onlyRenderVisibleElements
+    >
+      <Background />
+      <Controls showInteractive={false} />
+      <MiniMap
+        nodeColor={(node: ReactFlowNode<CustomNodeProps>) =>
+          nodeColor(
+            node,
+            colorMode === "dark" ? evenDark : evenLight,
+            colorMode === "dark" ? oddDark : oddLight,
+          )
+        }
+        nodeStrokeColor={(node: ReactFlowNode<CustomNodeProps>) =>
+          node.data.isSelected && selectedColor !== undefined ? selectedColor : ""
+        }
+        nodeStrokeWidth={15}
+        pannable
+        zoomable
+      />
+    </ReactFlow>
   );
 };

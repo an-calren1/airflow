@@ -377,6 +377,9 @@ class _BasePythonVirtualenvOperator(PythonOperator, metaclass=ABCMeta):
         "yesterday_ds",
         "yesterday_ds_nodash",
     }
+    if AIRFLOW_V_3_0_PLUS:
+        BASE_SERIALIZABLE_CONTEXT_KEYS.add("task_reschedule_count")
+
     PENDULUM_SERIALIZABLE_CONTEXT_KEYS = {
         "data_interval_end",
         "data_interval_start",
@@ -788,7 +791,7 @@ class PythonVirtualenvOperator(_BasePythonVirtualenvOperator):
                     if hash_marker.exists():
                         previous_hash_data = hash_marker.read_text(encoding="utf8")
                         if previous_hash_data == hash_data:
-                            self.log.info("Re-using cached Python virtual environment in %s", venv_path)
+                            self.log.info("Reusing cached Python virtual environment in %s", venv_path)
                             return venv_path
 
                         _, hash_data_before_upgrade = self._calculate_cache_hash(exclude_cloudpickle=True)

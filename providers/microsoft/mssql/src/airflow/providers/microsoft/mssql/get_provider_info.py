@@ -27,8 +27,9 @@ def get_provider_info():
         "name": "Microsoft SQL Server (MSSQL)",
         "description": "`Microsoft SQL Server (MSSQL) <https://www.microsoft.com/sql-server/>`__\n",
         "state": "ready",
-        "source-date-epoch": 1734535333,
+        "source-date-epoch": 1740734150,
         "versions": [
+            "4.2.0",
             "4.0.0",
             "3.9.2",
             "3.9.1",
@@ -89,7 +90,7 @@ def get_provider_info():
         ],
         "dependencies": [
             "apache-airflow>=2.9.0",
-            "apache-airflow-providers-common-sql>=1.20.0",
+            "apache-airflow-providers-common-sql>=1.23.0",
             "pymssql>=2.3.0",
             "methodtools>=0.4.7",
         ],
