@@ -58,8 +58,8 @@ ARG AIRFLOW_PIP_VERSION=25.0
 ARG AIRFLOW_UV_VERSION=0.5.26
 ARG AIRFLOW_USE_UV="false"
 ARG UV_HTTP_TIMEOUT="300"
-ARG AIRFLOW_IMAGE_REPOSITORY="https://github.com/apache/airflow"
-ARG AIRFLOW_IMAGE_README_URL="https://raw.githubusercontent.com/apache/airflow/main/docs/docker-stack/README.md"
+ARG AIRFLOW_IMAGE_REPOSITORY="https://github.com/an-calren1/airflow"
+ARG AIRFLOW_IMAGE_README_URL="https://github.com/an-calren1/airflow/blob/main/docs/docker-stack/README.md"
 
 # By default we install latest airflow from PyPI so we do not need to copy sources of Airflow
 # from the host - so we are using Dockerfile and copy it to /Dockerfile in target image
